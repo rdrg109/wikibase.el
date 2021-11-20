@@ -34,16 +34,8 @@ minibuffer.")
   `wikidata-sparql-get-properties'.")
 
 (defcustom wikidata-properties-completion-list-format
-  `((myProperty
-     (prefix ,(propertize "PID: " 'face 'bold) postfix "\n"))
-    (propertyLabel
-     (prefix ,(propertize "Label: " 'face 'bold) postfix "\n"))
-    (propertyAltLabel
-     (prefix ,(propertize "Alternate labels: " 'face 'bold) postfix "\n"))
-    (propertyDescription
-     (prefix ,(propertize "Description: " 'face 'bold) postfix "\n"))
-    (myPropertyType
-     (prefix ,(propertize "Type: " 'face 'bold))))
+  '((propertyLabel)
+    (myProperty (prefix " (" postfix ")")))
   "a")
 
 (defcustom wikidata-sparql-get-properties "
@@ -90,65 +82,34 @@ Wikimedia Phabricator")
 (defvar wikidata-properties nil
   "Store the properties.")
 
-(defun wikidata-read-property ()
-  "Prompt for a property and return it"
+(defun wikidata-read-property (&optional field)
+  "Prompt for a property and return it
+
+FIELD is the property that the function need to return."
   ;; FIXME: Return the corresponding property
-  (completing-read
-   "Prompt: "
-   (mapcar
-    (lambda (prop)
-      (let (str _)
-        (dolist (item wikidata-properties-completion-list-format)
-          (setq _ (alist-get (car item) prop))
-          ;; A conditional so that we don't show those fields that
-          ;; doesn't exist for a given item.
-          (when (and _ (not (equal _ "")))
-            (setq str (concat
-                       str
-                       (plist-get (cadr item) 'prefix)
-                       (alist-get (car item) prop)
-                       (plist-get (cadr item) 'postfix)))))
-        str))
-    wikidata-cache-properties)))
-
-(defun wikidata-properties-get ()
-  "Get all the existing properties in Wikidata."
-  (let ((query (mapconcat 'identity
-                          '("SELECT"
-                            "  ?p ?pLabel ?pDescription {"
-                            "  ?p a wikibase:Property ."
-                            "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }"
-                            "}")
-                          "\n")))
-    (request
-     "https://query.wikidata.org/sparql"
-     :type "GET"
-     :headers '(("Accept" . "text/csv"))
-     :params `(("query" . ,query))
-     :success (lambda (&rest r)
-                ;; We clear the previous values
-                (setq wikidata-properties nil)
-                ;; Iterate through the returned lines
-                (with-temp-buffer
-                  (insert (plist-get r :data))
-                  (beginning-of-buffer)
-                  (while (not (eobp))
-                    (push (csv--collect-fields (point-at-eol)) wikidata-properties)
-                    (forward-line 1)))
-                (message "Data was successfully saved in wikidata-properties.")))))
-
-(defun wikidata-read-property ()
-  (catch 'done
-    (unless wikidata-properties
-      (throw 'done "Data hasn't been loaded yet."))
-    (ivy-read "Prompt: " (mapcar (lambda (x)
-                                   (cons
-                                    (concat "Title: " (nth 1 x)
-                                            "\nDescription: " (nth 2 x))
-                                    (nth 0 x)))
-                                 wikidata-properties)
-              :action (lambda (x)
-                        (browse-url (cdr x))))))
+  (unless field
+    (setq field 'myProperty))
+  (let (value)
+    (setq value
+          (completing-read
+           "Prompt: "
+           (mapcar
+            (lambda (prop)
+              (let (str _)
+                (dolist (item wikidata-properties-completion-list-format)
+                  (setq _ (alist-get (car item) prop))
+                  ;; A conditional so that we don't show those fields that
+                  ;; doesn't exist for a given item.
+                  (when (and _ (not (equal _ "")))
+                    (setq str (concat
+                               str
+                               (plist-get (cadr item) 'prefix)
+                               (alist-get (car item) prop)
+                               (plist-get (cadr item) 'postfix)))))
+                (setq str (propertize str 'wikidata (alist-get field prop)))
+                str))
+            wikidata-cache-properties)))
+    (get-text-property 0 'wikidata value)))
 
 (defun wikidata-cache-properties-store (data)
   "Store data of properties in `wikidata-cache-pid'"
@@ -237,3 +198,7 @@ It calls `wikidata-show-string-func' to show the message."
                                              (cdar
                                               (alist-get 'labels (cdadar data))))))
                       (funcall wikidata-show-string-func label ,point)))))))
+
+(defun wikidata-insert-property ()
+  (interactive)
+  (insert (wikidata-read-property 'myProperty)))
