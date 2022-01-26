@@ -1,0 +1,20 @@
+* wikidata.el
+:PROPERTIES:
+:CREATED: [2022-01-26 12:06:34 -05]
+:END:
+* helm-wikidata.el
+:PROPERTIES:
+:CREATED: [2022-01-26 12:06:27 -05]
+:END:
+
+** TODO Benchmark comparisons of request.el and url-retrieve-synchronously
+** TODO Benchmark comparisons for the JSON parser and XML parser
+** TODO Show candidate label and descriptions in UTF-8
+** TODO Support properties
+** TODO Support lexemes
+:PROPERTIES:
+:CREATED: [2022-01-26 12:04:53 -05]
+:END:
+** TODO Allow user to specify limit for number of candidates
+
+https://www.wikidata.org/w/api.php?action=help&modules=wbsearchentities
