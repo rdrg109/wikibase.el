@@ -173,6 +173,18 @@ With a prefix argument, insert the identifier to the kill ring."
                    (throw 'done "The thing at point is not an identifier"))))
       (browse-url url))))
 
+(defun wikidata-visit-entity (&optional entity)
+  (interactive (list (or (org-in-regexp wikidata-id-entity-re)
+                         (org-in-regexp wikidata-id-phabricator-re))))
+  (let (url)
+    (when (eq (type-of entity) 'cons)
+      (setq entity (buffer-substring-no-properties (car entity) (cdr entity))))
+    (setq url (cond ((string-match wikidata-id-entity-re entity)
+                     (concat "https://www.wikidata.org/entity/" entity))
+                    ((string-match wikidata-id-phabricator-re entity)
+                     (concat "https://phabricator.wikimedia.org/" entity))))
+    (browse-url url)))
+
 (defun wikidata-show-label-entity-id-at-point ()
   "Show the label of the entity at point.
 
