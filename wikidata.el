@@ -88,6 +88,8 @@ Wikimedia Phabricator")
 
 FIELD is the property that the function need to return."
   ;; FIXME: Return the corresponding property
+  (unless wikidata-cache-properties
+    (error "wikidata-cache-properties is nil"))
   (unless field
     (setq field 'myProperty))
   (let (value)
