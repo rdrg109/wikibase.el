@@ -219,6 +219,12 @@ It calls `wikidata-show-string-func' to show the message."
 (defun wikidata-insert-property ()
   (interactive)
   (insert (wikidata-read-property 'myProperty)))
+
+(defun wikidata-visit-property ()
+  (interactive)
+  (wikidata-visit-entity
+   (wikidata-read-property 'myProperty)))
+
 (defun wikidata-show-query-details ()
   "Show the details of the query in the current buffer
 
