@@ -78,8 +78,6 @@ Wikimedia Phabricator")
 (defvar wikidata-cache-lexemes nil
   "Cache for Wikidata lexemes (those whose ID start with L)")
 
-(defvar wikidata-properties nil
-  "Store the properties.")
 (defvar wikidata-notify-function
   (lambda (&rest r)
     (message "wikidata.el: %s" (plist-get r :body)))
