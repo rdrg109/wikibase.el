@@ -80,6 +80,10 @@ Wikimedia Phabricator")
 
 (defvar wikidata-properties nil
   "Store the properties.")
+(defvar wikidata-notify-function
+  (lambda (&rest r)
+    (message "wikidata.el: %s" (plist-get r :body)))
+  "Function for showing notifications of this package")
 
 (defun wikidata-read-property (&optional field)
   "Prompt for a property and return it
@@ -135,16 +139,18 @@ FIELD is the property that the function need to return."
 (defun wikidata-cache-properties-get ()
   "Get data from all existing properties"
   (request
-   "https://query.wikidata.org/sparql"
-   :type "GET"
-   :headers '(("Accept" . "text/csv"))
-   :params `(("query" . ,wikidata-sparql-get-properties))
-   :success
-   (lambda (&rest r)
-     ;; FIXME: Omit table header. It contains the labels of the rows.
-     ;; FIXME: property must equal the identifier of the property
-     ;; FIXME: propertyType must not be a URL
-     (wikidata-cache-properties-store (plist-get r :data)))))
+    "https://query.wikidata.org/sparql"
+    :type "GET"
+    :headers '(("Accept" . "text/csv"))
+    :params `(("query" . ,wikidata-sparql-get-properties))
+    :success
+    (lambda (&rest r)
+      ;; FIXME: Omit table header. It contains the labels of the rows.
+      ;; FIXME: property must equal the identifier of the property
+      ;; FIXME: propertyType must not be a URL
+      (wikidata-cache-properties-store (plist-get r :data))
+      (funcall wikidata-notify-function
+               :body "Properties were retrieved"))))
 
 (defun wikidata-visit-entity-at-point ()
   "Open the Q, L, P or T entity at point
