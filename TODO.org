@@ -2,6 +2,14 @@
 :PROPERTIES:
 :CREATED: [2022-01-26 12:06:34 -05]
 :END:
+
+** With a prefix argument, prompt for a language when showing the label of an entity
+** Show labels in multiple languages
+
+Define a variable for storing the languages in which this information is shown.
+
+** Cache labels of items, properties and lexemes in variable
+
 * helm-wikidata.el
 :PROPERTIES:
 :CREATED: [2022-01-26 12:06:27 -05]
