@@ -70,10 +70,10 @@ entity at point")
 Wikimedia Phabricator")
 
 (defvar wikidata-cache-properties nil
-  "Cache for Wikidata properties (those whose ID start with P")
+  "Cache for Wikidata properties (those whose ID start with P)")
 
 (defvar wikidata-cache-items nil
-  "Cache for Wikidata entities (those whose ID start with Q)")
+  "Cache for Wikidata items (those whose ID start with Q)")
 
 (defvar wikidata-cache-lexemes nil
   "Cache for Wikidata lexemes (those whose ID start with L)")
