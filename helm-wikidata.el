@@ -19,12 +19,14 @@
                           helm-pattern))))
     (mapcar (lambda (suggestion)
               (cons
+               ;; The strings are decoded so that Unicode coding character
+               ;; (e.g. \345\247\223\346\260\217) are not shown
                (concat
                 "Label: "
-                (plist-get suggestion 'label)
+                (decode-coding-string (plist-get suggestion 'label) 'utf-8)
                 "\n"
                 "Description: "
-                (plist-get suggestion 'description))
+                (decode-coding-string (plist-get suggestion 'description) 'utf-8))
                (plist-get suggestion 'id)))
             suggestions)))
 
