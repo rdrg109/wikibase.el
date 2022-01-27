@@ -40,25 +40,24 @@ minibuffer.")
 
 (defcustom wikidata-sparql-get-properties "
 SELECT
-  ?myProperty
-  ?myPropertyType
-  ?propertyLabel
-  ?propertyDescription
-  ?propertyAltLabel
+  ?propertyId
+  ?propertyType
+  ?propertyUriLabel
+  ?propertyUriDescription
+  ?propertyUriAltLabel
 {
-  ?property wikibase:propertyType ?propertyType.
+  ?propertyUri wikibase:propertyType ?wikibasePropertyType.
 
   # It is necessary to explicitly mention a language. Otherwise, the
-  # API returns nothing in those fields that intend to use a label or
-  # other information
+  # API returns nothing in those fields that intend to use a label.
 
   SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }
 
   # This avoids that the entire URL to the items are retrieved. That
   # is, only the necessary information is sent by the server.
 
-  BIND(STRAFTER(STR(?property), '/entity/') AS ?myProperty)
-  BIND(STRAFTER(STR(?propertyType), '/ontology#') AS ?myPropertyType)
+  BIND(STRAFTER(STR(?propertyUri), '/entity/') AS ?propertyId)
+  BIND(STRAFTER(STR(?wikibasePropertyType), '/ontology#') AS ?propertyType)
 }"
   "SPARQL query for getting all existing properties")
 
