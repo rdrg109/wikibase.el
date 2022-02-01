@@ -70,16 +70,16 @@
                      (url-hexify-string candidate))))
     (browse-url-xdg-open arg)))
 
-(defun helm-wikidata-insert-qid-at-point (candidate)
+(defun helm-wikidata-insert-id-at-point (candidate)
   (insert candidate))
 
-(defun helm-wikidata-kill-qid (candidate)
+(defun helm-wikidata-kill-id (candidate)
   (kill-new candidate))
 
 (defcustom helm-wikidata-suggest-actions
   '(("Visit URL" . helm-wikidata-visit-url)
-    ("Insert QID at point" . helm-wikidata-insert-qid)
-    ("Kill QID" . helm-wikidata-kill-qid))
+    ("Insert QID at point" . helm-wikidata-insert-id-at-point)
+    ("Kill QID" . helm-wikidata-kill-id))
   "List of actions for `helm-source-wikidata-suggest'."
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
