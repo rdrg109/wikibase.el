@@ -1,5 +1,13 @@
 (require 'helm-net)
 
+(defcustom helm-wikidata-suggest-actions
+  '(("Visit URL" . helm-wikidata-visit-url)
+    ("Insert QID at point" . helm-wikidata-insert-id-at-point)
+    ("Kill QID" . helm-wikidata-kill-id))
+  "List of actions for `helm-source-wikidata-suggest'."
+  :group 'helm-wikidata
+  :type '(alist :key-type string :value-type function))
+
 (defvar helm-wikidata-suggest-url
   "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=%s&format=xml&errorformat=plaintext&language=es&uselang=es&type=item&limit=20&utf8=1")
 
@@ -80,14 +88,6 @@
 
 (defun helm-wikidata-kill-id (candidate)
   (kill-new candidate))
-
-(defcustom helm-wikidata-suggest-actions
-  '(("Visit URL" . helm-wikidata-visit-url)
-    ("Insert QID at point" . helm-wikidata-insert-id-at-point)
-    ("Kill QID" . helm-wikidata-kill-id))
-  "List of actions for `helm-source-wikidata-suggest'."
-  :group 'helm-wikidata
-  :type '(alist :key-type string :value-type function))
 
 (defun helm-wikidata-suggest ()
   "Preconfigured `helm' for Google search with Google suggest."
