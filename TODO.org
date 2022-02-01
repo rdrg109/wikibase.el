@@ -3,26 +3,193 @@
 :CREATED: [2022-01-26 12:06:34 -05]
 :END:
 
-** With a prefix argument, prompt for a language when showing the label of an entity
-** Show labels in multiple languages
+** TODO With a prefix argument, prompt for a language when showing the label of an entity
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 17:49]
+:END:
+** TODO Show labels in multiple languages
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 17:49]
+:END:
 
 Define a variable for storing the languages in which this information is shown.
 
-** Cache labels of items, properties and lexemes in variable
+** TODO Cache labels of items, properties and lexemes in variable
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 17:49]
+:END:
 
 * helm-wikidata.el
 :PROPERTIES:
 :CREATED: [2022-01-26 12:06:27 -05]
 :END:
 
-** TODO Benchmark comparisons of request.el and url-retrieve-synchronously
-** TODO Benchmark comparisons for the JSON parser and XML parser
+** TODO Benchmark comparisons between =request.el= and =url-retrieve-synchronously=
+** TODO Benchmark comparisons between JSON parser and XML parser
 ** TODO Show candidate label and descriptions in UTF-8
-** TODO Support properties
-** TODO Support lexemes
+** TODO =wbsearchentities= endpoint
+:PROPERTIES:
+:CREATED: [2022-02-01 17:47:56 -05]
+:END:
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 17:48]
+:END:
+
+*** TODO Add support for forms
+:PROPERTIES:
+:CREATED: [2022-02-01 16:44:10 -05]
+:END:
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 16:44]
+:END:
+*** TODO Add support for senses
+:PROPERTIES:
+:CREATED: [2022-02-01 16:44:13 -05]
+:END:
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 16:44]
+:END:
+*** TODO Add support for lexemes
 :PROPERTIES:
 :CREATED: [2022-01-26 12:04:53 -05]
 :END:
+*** TODO Add support for properties
 ** TODO Allow user to specify limit for number of candidates
 
 https://www.wikidata.org/w/api.php?action=help&modules=wbsearchentities
+
+
+#+begin_src restclient
+ https://www.wikidata.org/w/api.php?action=wbsearchentities&search=cc0&props=&format=json&errorformat=plaintext&language=en&uselang=en&type=item&limit=20
+#+end_src
+** TODO Propertize labels of fields in completion list
+:PROPERTIES:
+:CREATED: [2022-02-01 17:48:55 -05]
+:END:
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 17:49]
+:END:
+** TODO Use =request.el= with asynchronous calsl
+:PROPERTIES:
+:CREATED: [2022-02-01 16:44:31 -05]
+:END:
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 16:44]
+:END:
+** TODO Show aliases of items
+:PROPERTIES:
+:CREATED: [2022-02-01 17:32:33 -05]
+:END:
+:LOGBOOK:
+- State "TODO" from  [2022-02-01 Tue 17:33]
+:END:
+
+Some items have aliases
+
+#+HEADER: :noheaders
+#+begin_src restclient
+:params := <<
+(request--urlencode-alist '(
+("errorformat" . "plaintext")
+("format" . "json")
+("language" . "en")
+("uselang" . "en")
+("action" . "wbsearchentities")
+("props" . "")
+("type" . "item")
+("search" . "cc0")
+("limit" . "1")))
+#
+GET https://www.wikidata.org/w/api.php?:params
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "searchinfo": {
+    "search": "cc0"
+  },
+  "search": [
+    {
+      "id": "Q6938433",
+      "title": "Q6938433",
+      "pageid": 6801334,
+      "repository": "wikidata",
+      "concepturi": "http://www.wikidata.org/entity/Q6938433",
+      "label": "CC0",
+      "description": "legal document dedicating a copyrighted work to the public domain",
+      "match": {
+        "type": "label",
+        "language": "en",
+        "text": "CC0"
+      }
+    }
+  ],
+  "search-continue": 1,
+  "success": 1
+}
+#+END_SRC
+
+Some items doesn't have aliases
+
+#+HEADER: :noheaders
+#+begin_src restclient
+:params := <<
+(request--urlencode-alist '(
+("errorformat" . "plaintext")
+("format" . "json")
+("language" . "en")
+("uselang" . "en")
+("action" . "wbsearchentities")
+("props" . "")
+("type" . "item")
+("search" . "cc0")
+("limit" . "2")))
+#
+GET https://www.wikidata.org/w/api.php?:params
+#+end_src
+
+#+RESULTS:
+#+BEGIN_SRC js
+{
+  "searchinfo": {
+    "search": "cc0"
+  },
+  "search": [
+    {
+      "id": "Q6938433",
+      "title": "Q6938433",
+      "pageid": 6801334,
+      "repository": "wikidata",
+      "concepturi": "http://www.wikidata.org/entity/Q6938433",
+      "label": "CC0",
+      "description": "legal document dedicating a copyrighted work to the public domain",
+      "match": {
+        "type": "label",
+        "language": "en",
+        "text": "CC0"
+      }
+    },
+    {
+      "id": "Q78420734",
+      "title": "Q78420734",
+      "pageid": 77873341,
+      "repository": "wikidata",
+      "concepturi": "http://www.wikidata.org/entity/Q78420734",
+      "label": "No Copyright Work",
+      "description": "Works with Public Domain Mark or CC0 Public Domain Dedication",
+      "match": {
+        "type": "alias",
+        "language": "en",
+        "text": "CC0 Work"
+      },
+      "aliases": [
+        "CC0 Work"
+      ]
+    }
+  ],
+  "search-continue": 2,
+  "success": 1
+}
+#+END_SRC
+
