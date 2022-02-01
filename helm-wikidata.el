@@ -18,11 +18,16 @@
                ;; The strings are decoded so that Unicode coding character
                ;; (e.g. \345\247\223\346\260\217) are not shown
                (concat
-                "Label: "
-                (decode-coding-string (plist-get suggestion 'label) 'utf-8)
-                "\n"
-                "Description: "
-                (decode-coding-string (plist-get suggestion 'description) 'utf-8))
+                "QID: "
+                (decode-coding-string (plist-get suggestion 'id) 'utf-8)
+                (when (plist-get suggestion 'label)
+                  (concat
+                   "\nLabel: "
+                   (decode-coding-string (plist-get suggestion 'label) 'utf-8)))
+                (when (plist-get suggestion 'description)
+                  (concat
+                   "\nDescription: "
+                   (decode-coding-string (plist-get suggestion 'description) 'utf-8))))
                (plist-get suggestion 'id)))
             suggestions)))
 
