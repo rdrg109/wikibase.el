@@ -12,7 +12,9 @@
 
 (defun helm-wikidata-suggest-set-candidates ()
   "Set candidates with result and number of wikidata results found."
-  (let ((suggestions (helm-wikidata-suggest-fetch helm-pattern)))
+  (let ((suggestions
+         (unless (equal helm-pattern "")
+           (helm-wikidata-suggest-fetch helm-pattern))))
     (mapcar (lambda (suggestion)
               (cons
                ;; The strings are decoded so that Unicode coding character
