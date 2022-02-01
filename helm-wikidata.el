@@ -22,6 +22,11 @@
                (concat
                 "QID: "
                 (decode-coding-string (plist-get suggestion 'id) 'utf-8)
+                ;; Check that suggestion has a "label" or
+                ;; "description". If it doesn't the label is not
+                ;; shown. It also avoids getting (wrong-type-argument
+                ;; stringp nil) when calling decode-coding-string with
+                ;; nil.
                 (when (plist-get suggestion 'label)
                   (concat
                    "\nLabel: "
