@@ -10,13 +10,9 @@
   'helm-wikidata-suggest-set-candidates
   "Default function to use in `helm-wikidata-suggest'.")
 
-(defun helm-wikidata-suggest-set-candidates (&optional request-prefix)
+(defun helm-wikidata-suggest-set-candidates ()
   "Set candidates with result and number of wikidata results found."
-  (let ((suggestions (helm-wikidata-suggest-fetch
-                      (or (and request-prefix
-                               (concat request-prefix
-                                       " " helm-pattern))
-                          helm-pattern))))
+  (let ((suggestions (helm-wikidata-suggest-fetch helm-pattern)))
     (mapcar (lambda (suggestion)
               (cons
                ;; The strings are decoded so that Unicode coding character
