@@ -1,3 +1,4 @@
+(require 'request)
 (require 'helm-net)
 
 (defcustom helm-wikidata-suggest-actions
@@ -46,28 +47,35 @@
                (plist-get suggestion 'id)))
             suggestions)))
 
-(defun helm-wikidata-suggest-parser ()
-  (cl-loop
-   with result-alist = (xml-get-children
-                        (assq 'search
-                              (cdar
-                               (xml-parse-region (point-min) (point-max))))
-                        'entity)
-   for i in result-alist collect
-   (list
-    'id
-    (alist-get 'id (cadr i))
-    'label
-    (alist-get 'label (cadr i))
-    'description
-    (alist-get 'description (cadr i)))))
-
 (defun helm-wikidata-suggest-fetch (input)
   "Fetch suggestions for INPUT from XML buffer."
-  (let ((request (format helm-wikidata-suggest-url
-                         (url-hexify-string input))))
-    (helm-net--url-retrieve-sync
-     request #'helm-wikidata-suggest-parser)))
+  (when (and input (not (equal input "")))
+    (request-response-data
+     (request "https://www.wikidata.org/w/api.php"
+       :sync t
+       :params `(("action" . "wbsearchentities")
+                 ("search" . ,input)
+                 ("format" . "xml")
+                 ("errorformat" . "plaintext")
+                 ("language" . "es")
+                 ("uselang" . "es")
+                 ("type" . "item")
+                 ("limit" . "20"))
+       :parser (lambda ()
+                 (cl-loop
+                  with result-alist = (xml-get-children
+                                       (assq 'search
+                                             (cdar
+                                              (xml-parse-region (point-min) (point-max))))
+                                       'entity)
+                  for i in result-alist collect
+                  (list
+                   'id
+                   (alist-get 'id (cadr i))
+                   'label
+                   (alist-get 'label (cadr i))
+                   'description
+                   (alist-get 'description (cadr i)))))))))
 
 (defvar helm-source-wikidata-suggest
   (helm-build-sync-source "Wikidata Suggest"
