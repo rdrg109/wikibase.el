@@ -16,11 +16,11 @@
   'helm-wikidata-suggest-set-candidates
   "Default function to use in `helm-wikidata-suggest'.")
 
-(defun helm-wikidata-suggest-set-candidates ()
+(defun helm-wikidata-suggest-set-candidates (type)
   "Set candidates with result and number of wikidata results found."
   (let ((suggestions
          (unless (equal helm-pattern "")
-           (helm-wikidata-suggest-fetch helm-pattern))))
+           (helm-wikidata-suggest-fetch type helm-pattern))))
     (mapcar (lambda (suggestion)
               (cons
                ;; The strings are decoded so that Unicode coding character
@@ -44,7 +44,7 @@
                (plist-get suggestion 'id)))
             suggestions)))
 
-(defun helm-wikidata-suggest-fetch (input)
+(defun helm-wikidata-suggest-fetch (type input)
   "Fetch suggestions for INPUT from XML buffer."
   (when (and input (not (equal input "")))
     (request-response-data
@@ -56,7 +56,7 @@
                  ("errorformat" . "plaintext")
                  ("language" . "es")
                  ("uselang" . "es")
-                 ("type" . "item")
+                 ("type" . ,type)
                  ("limit" . "20"))
        :parser (lambda ()
                  (cl-loop
@@ -74,10 +74,37 @@
                    'description
                    (alist-get 'description (cadr i)))))))))
 
-(defvar helm-source-wikidata-suggest
+(defvar helm-wikidata-suggest-item-source
   (helm-build-sync-source "Wikidata Suggest"
     :candidates (lambda ()
-                  (funcall helm-wikidata-suggest-default-function))
+                  (helm-wikidata-suggest-set-candidates "item"))
+    :action 'helm-wikidata-suggest-actions
+    :match-dynamic t
+    :keymap helm-map
+    :multiline t))
+
+(defvar helm-wikidata-suggest-property-source
+  (helm-build-sync-source "Wikidata Suggest"
+    :candidates (lambda ()
+                  (helm-wikidata-suggest-set-candidates "property"))
+    :action 'helm-wikidata-suggest-actions
+    :match-dynamic t
+    :keymap helm-map
+    :multiline t))
+
+(defvar helm-wikidata-suggest-lexeme-source
+  (helm-build-sync-source "Wikidata Suggest"
+    :candidates (lambda ()
+                  (helm-wikidata-suggest-set-candidates "lexeme"))
+    :action 'helm-wikidata-suggest-actions
+    :match-dynamic t
+    :keymap helm-map
+    :multiline t))
+
+(defvar helm-wikidata-suggest-form-source
+  (helm-build-sync-source "Wikidata Suggest"
+    :candidates (lambda ()
+                  (helm-wikidata-suggest-set-candidates "form"))
     :action 'helm-wikidata-suggest-actions
     :match-dynamic t
     :keymap helm-map
@@ -94,6 +121,18 @@
 (defun helm-wikidata-kill-id (candidate)
   (kill-new candidate))
 
-(defun helm-wikidata-suggest ()
+(defun helm-wikidata-suggest-item ()
   (interactive)
-  (helm-other-buffer 'helm-source-wikidata-suggest "*helm wikidata*"))
+  (helm-other-buffer 'helm-wikidata-suggest-item-source "*helm wikidata*"))
+
+(defun helm-wikidata-suggest-property ()
+  (interactive)
+  (helm-other-buffer 'helm-wikidata-suggest-property-source "*helm wikidata*"))
+
+(defun helm-wikidata-suggest-lexeme ()
+  (interactive)
+  (helm-other-buffer 'helm-wikidata-suggest-lexeme-source "*helm wikidata*"))
+
+(defun helm-wikidata-suggest-form ()
+  (interactive)
+  (helm-other-buffer 'helm-wikidata-suggest-form-source "*helm wikidata*"))
