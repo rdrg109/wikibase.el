@@ -1,5 +1,4 @@
 (require 'request)
-(require 'helm-net)
 
 (defcustom helm-wikidata-suggest-actions
   '(("Visit URL" . helm-wikidata-visit-url)
