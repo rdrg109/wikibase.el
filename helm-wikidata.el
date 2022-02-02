@@ -10,7 +10,7 @@
   :type '(alist :key-type string :value-type function))
 
 (defvar helm-wikidata-suggest-search-url
-  "https://www.wikidata.org/wiki/%s")
+  "https://www.wikidata.org/entity/%s")
 
 (defun helm-wikidata-suggest-set-candidates (type)
   "Set candidates with result and number of wikidata results found."
