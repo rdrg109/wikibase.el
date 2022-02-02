@@ -95,6 +95,5 @@
   (kill-new candidate))
 
 (defun helm-wikidata-suggest ()
-  "Preconfigured `helm' for Google search with Google suggest."
   (interactive)
   (helm-other-buffer 'helm-source-wikidata-suggest "*helm wikidata*"))
