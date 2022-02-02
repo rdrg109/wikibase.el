@@ -9,9 +9,6 @@
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
-(defvar helm-wikidata-suggest-url
-  "https://www.wikidata.org/w/api.php?action=wbsearchentities&search=%s&format=xml&errorformat=plaintext&language=es&uselang=es&type=item&limit=20&utf8=1")
-
 (defvar helm-wikidata-suggest-search-url
   "https://www.wikidata.org/wiki/%s")
 
