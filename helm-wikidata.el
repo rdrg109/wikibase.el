@@ -12,10 +12,6 @@
 (defvar helm-wikidata-suggest-search-url
   "https://www.wikidata.org/wiki/%s")
 
-(defvar helm-wikidata-suggest-default-function
-  'helm-wikidata-suggest-set-candidates
-  "Default function to use in `helm-wikidata-suggest'.")
-
 (defun helm-wikidata-suggest-set-candidates (type)
   "Set candidates with result and number of wikidata results found."
   (let ((suggestions
