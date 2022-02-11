@@ -8,6 +8,13 @@
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
+(defcustom helm-wikidata-wbsearchentities-custom-params
+  '(("language" . "en")
+    ("uselang" . "en")
+    ("limit" . "5"))
+  "Custom parameters that are passed to the API endpoint
+wbsearchentities.")
+
 (defvar helm-wikidata-suggest-search-url
   "https://www.wikidata.org/entity/%s")
 
@@ -49,10 +56,8 @@
                  ("search" . ,input)
                  ("format" . "xml")
                  ("errorformat" . "plaintext")
-                 ("language" . "es")
-                 ("uselang" . "es")
                  ("type" . ,type)
-                 ("limit" . "20"))
+                 ,@helm-wikidata-wbsearchentities-custom-params)
        :parser (lambda ()
                  (cl-loop
                   with result-alist = (xml-get-children
