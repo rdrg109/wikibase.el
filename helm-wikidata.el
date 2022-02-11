@@ -136,3 +136,5 @@ wbsearchentities.")
 (defun helm-wikidata-suggest-form ()
   (interactive)
   (helm-other-buffer 'helm-wikidata-suggest-form-source "*helm wikidata*"))
+
+(provide 'helm-wikidata)
