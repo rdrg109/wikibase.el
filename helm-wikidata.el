@@ -15,6 +15,9 @@
   "Custom parameters that are passed to the API endpoint
 wbsearchentities.")
 
+(defcustom helm-wikidata-buffer-name "*helm wikidata*"
+  "Buffer name where completions of this package are shown")
+
 (defvar helm-wikidata-suggest-search-url
   "https://www.wikidata.org/entity/%s")
 
@@ -123,18 +126,18 @@ wbsearchentities.")
 
 (defun helm-wikidata-suggest-item ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-item-source "*helm wikidata*"))
+  (helm-other-buffer 'helm-wikidata-suggest-item-source helm-wikidata-buffer-name))
 
 (defun helm-wikidata-suggest-property ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-property-source "*helm wikidata*"))
+  (helm-other-buffer 'helm-wikidata-suggest-property-source helm-wikidata-buffer-name))
 
 (defun helm-wikidata-suggest-lexeme ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-lexeme-source "*helm wikidata*"))
+  (helm-other-buffer 'helm-wikidata-suggest-lexeme-source helm-wikidata-buffer-name))
 
 (defun helm-wikidata-suggest-form ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-form-source "*helm wikidata*"))
+  (helm-other-buffer 'helm-wikidata-suggest-form-source helm-wikidata-buffer-name))
 
 (provide 'helm-wikidata)
