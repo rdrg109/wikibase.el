@@ -1,9 +1,33 @@
 (require 'request)
 
-(defcustom helm-wikidata-suggest-actions
-  '(("Visit URL" . helm-wikidata-visit-url)
-    ("Insert QID at point" . helm-wikidata-insert-id-at-point)
+(defcustom helm-wikidata-suggest-item-actions
+  '(("Insert QID at point" . helm-wikidata-insert-id-at-point)
+    ("Visit in browser" . helm-wikidata-visit-url)
     ("Kill QID" . helm-wikidata-kill-id))
+  "List of actions for `helm-source-wikidata-suggest'."
+  :group 'helm-wikidata
+  :type '(alist :key-type string :value-type function))
+
+(defcustom helm-wikidata-suggest-property-actions
+  '(("Insert PID at point" . helm-wikidata-insert-id-at-point)
+    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Kill PID" . helm-wikidata-kill-id))
+  "List of actions for `helm-source-wikidata-suggest'."
+  :group 'helm-wikidata
+  :type '(alist :key-type string :value-type function))
+
+(defcustom helm-wikidata-suggest-lexeme-actions
+  '(("Insert LID at point" . helm-wikidata-insert-id-at-point)
+    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Kill LID" . helm-wikidata-kill-id))
+  "List of actions for `helm-source-wikidata-suggest'."
+  :group 'helm-wikidata
+  :type '(alist :key-type string :value-type function))
+
+(defcustom helm-wikidata-suggest-form-actions
+  '(("Insert FID at point" . helm-wikidata-insert-id-at-point)
+    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Kill FID" . helm-wikidata-kill-id))
   "List of actions for `helm-source-wikidata-suggest'."
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
@@ -81,7 +105,7 @@ wbsearchentities.")
   (helm-build-sync-source "Wikidata Suggest"
     :candidates (lambda ()
                   (helm-wikidata-suggest-set-candidates "item"))
-    :action 'helm-wikidata-suggest-actions
+    :action 'helm-wikidata-suggest-item-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
@@ -90,7 +114,7 @@ wbsearchentities.")
   (helm-build-sync-source "Wikidata Suggest"
     :candidates (lambda ()
                   (helm-wikidata-suggest-set-candidates "property"))
-    :action 'helm-wikidata-suggest-actions
+    :action 'helm-wikidata-suggest-property-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
@@ -99,7 +123,7 @@ wbsearchentities.")
   (helm-build-sync-source "Wikidata Suggest"
     :candidates (lambda ()
                   (helm-wikidata-suggest-set-candidates "lexeme"))
-    :action 'helm-wikidata-suggest-actions
+    :action 'helm-wikidata-suggest-lexeme-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
@@ -108,7 +132,7 @@ wbsearchentities.")
   (helm-build-sync-source "Wikidata Suggest"
     :candidates (lambda ()
                   (helm-wikidata-suggest-set-candidates "form"))
-    :action 'helm-wikidata-suggest-actions
+    :action 'helm-wikidata-suggest-form-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
