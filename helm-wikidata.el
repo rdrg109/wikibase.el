@@ -1,3 +1,4 @@
+(require 'helm)
 (require 'request)
 
 (defcustom helm-wikidata-suggest-item-actions
