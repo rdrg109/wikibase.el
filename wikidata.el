@@ -1,13 +1,3 @@
-;; The following worked
-;;
-;; (request
-;;   "https://query.wikidata.org/sparql"
-;;   :type "GET"
-;;   :headers '(("Accept" . "text/csv"))
-;;   :params `(("query" . ,wikidata-sparql-get-properties))
-;;   :success (lambda (&rest r)
-;;              (message "Success")))
-
 (require 'csv-mode)
 (require 'request)
 
