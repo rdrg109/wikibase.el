@@ -228,3 +228,5 @@ https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual#Explain_Query"
                query
                "&explain=details")))
     (w3m url)))
+
+(provide 'wikidata)
