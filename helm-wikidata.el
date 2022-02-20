@@ -5,7 +5,7 @@
   '(("Insert QID at point" . helm-wikidata-insert-id-at-point)
     ("Visit in browser" . helm-wikidata-visit-url)
     ("Kill QID" . helm-wikidata-kill-id))
-  "List of actions for `helm-source-wikidata-suggest'."
+  "List of actions for `helm-wikidata-suggest-item-source'."
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
@@ -13,7 +13,7 @@
   '(("Insert PID at point" . helm-wikidata-insert-id-at-point)
     ("Visit in browser" . helm-wikidata-visit-url)
     ("Kill PID" . helm-wikidata-kill-id))
-  "List of actions for `helm-source-wikidata-suggest'."
+  "List of actions for `helm-wikidata-suggest-property-source'."
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
@@ -21,7 +21,7 @@
   '(("Insert LID at point" . helm-wikidata-insert-id-at-point)
     ("Visit in browser" . helm-wikidata-visit-url)
     ("Kill LID" . helm-wikidata-kill-id))
-  "List of actions for `helm-source-wikidata-suggest'."
+  "List of actions for `helm-wikidata-suggest-lexeme-source'."
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
@@ -29,7 +29,7 @@
   '(("Insert FID at point" . helm-wikidata-insert-id-at-point)
     ("Visit in browser" . helm-wikidata-visit-url)
     ("Kill FID" . helm-wikidata-kill-id))
-  "List of actions for `helm-source-wikidata-suggest'."
+  "List of actions for `helm-wikidata-suggest-form-source'."
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
