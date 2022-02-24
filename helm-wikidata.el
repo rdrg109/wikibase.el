@@ -33,13 +33,6 @@
   :group 'helm-wikidata
   :type '(alist :key-type string :value-type function))
 
-(defcustom helm-wikidata-wbsearchentities-custom-params
-  '(("language" . "en")
-    ("uselang" . "en")
-    ("limit" . "5"))
-  "Custom parameters that are passed to the API endpoint
-wbsearchentities.")
-
 (defcustom helm-wikidata-buffer-name "*helm wikidata*"
   "Buffer name where completions of this package are shown")
 
