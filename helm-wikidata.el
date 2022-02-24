@@ -1,5 +1,6 @@
 (require 'helm)
 (require 'request)
+(require 'wikidata-wbsearchentities)
 
 (defcustom helm-wikidata-suggest-item-actions
   '(("Insert QID at point" . helm-wikidata-insert-id-at-point)
