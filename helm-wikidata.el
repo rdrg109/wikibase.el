@@ -3,7 +3,7 @@
 
 (defcustom helm-wikidata-suggest-item-actions
   '(("Insert QID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Visit item in browser" . helm-wikidata-visit-entity-in-browser)
     ("Kill QID" . helm-wikidata-kill-id))
   "List of actions for `helm-wikidata-suggest-item-source'."
   :group 'helm-wikidata
@@ -11,7 +11,7 @@
 
 (defcustom helm-wikidata-suggest-property-actions
   '(("Insert PID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Visit property in browser" . helm-wikidata-visit-entity-in-browser)
     ("Kill PID" . helm-wikidata-kill-id))
   "List of actions for `helm-wikidata-suggest-property-source'."
   :group 'helm-wikidata
@@ -19,7 +19,7 @@
 
 (defcustom helm-wikidata-suggest-lexeme-actions
   '(("Insert LID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Visit lexeme in browser" . helm-wikidata-visit-entity-in-browser)
     ("Kill LID" . helm-wikidata-kill-id))
   "List of actions for `helm-wikidata-suggest-lexeme-source'."
   :group 'helm-wikidata
@@ -27,7 +27,7 @@
 
 (defcustom helm-wikidata-suggest-form-actions
   '(("Insert FID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit in browser" . helm-wikidata-visit-url)
+    ("Visit form in browser" . helm-wikidata-visit-entity-in-browser)
     ("Kill FID" . helm-wikidata-kill-id))
   "List of actions for `helm-wikidata-suggest-form-source'."
   :group 'helm-wikidata
