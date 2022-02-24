@@ -138,10 +138,10 @@ wbsearchentities.")
     :keymap helm-map
     :multiline t))
 
-(defun helm-wikidata-visit-url (candidate)
-  (let ((arg (format helm-wikidata-suggest-search-url
+(defun helm-wikidata-visit-entity-in-browser (candidate)
+  (let ((url (format helm-wikidata-suggest-search-url
                      (url-hexify-string candidate))))
-    (browse-url-xdg-open arg)))
+    (browse-url url)))
 
 (defun helm-wikidata-insert-id-at-point (candidate)
   (insert candidate))
