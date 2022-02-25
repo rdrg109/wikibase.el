@@ -1,50 +1,48 @@
 (require 'helm)
 (require 'request)
-(require 'wikidata-wbsearchentities)
+(require 'wikibase-wbsearchentities)
 
-(defcustom helm-wikidata-suggest-item-actions
-  '(("Insert QID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit item in browser" . helm-wikidata-visit-entity-in-browser)
-    ("Kill QID" . helm-wikidata-kill-id))
-  "List of actions for `helm-wikidata-suggest-item-source'."
-  :group 'helm-wikidata
+(defcustom wikibase-helm-suggest-item-actions
+  '(("Insert QID at point" . wikibase-helm-insert-id-at-point)
+    ("Visit item in browser" . wikibase-helm-visit-entity-in-browser)
+    ("Kill QID" . wikibase-helm-kill-id))
+  "List of actions for `wikibase-helm-suggest-item-source'."
+  :group 'wikibase-helm
   :type '(alist :key-type string :value-type function))
 
-(defcustom helm-wikidata-suggest-property-actions
-  '(("Insert PID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit property in browser" . helm-wikidata-visit-entity-in-browser)
-    ("Kill PID" . helm-wikidata-kill-id))
-  "List of actions for `helm-wikidata-suggest-property-source'."
-  :group 'helm-wikidata
+(defcustom wikibase-helm-suggest-property-actions
+  '(("Insert PID at point" . wikibase-helm-insert-id-at-point)
+    ("Visit property in browser" . wikibase-helm-visit-entity-in-browser)
+    ("Kill PID" . wikibase-helm-kill-id))
+  "List of actions for `wikibase-helm-suggest-property-source'."
+  :group 'wikibase-helm
   :type '(alist :key-type string :value-type function))
 
-(defcustom helm-wikidata-suggest-lexeme-actions
-  '(("Insert LID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit lexeme in browser" . helm-wikidata-visit-entity-in-browser)
-    ("Kill LID" . helm-wikidata-kill-id))
-  "List of actions for `helm-wikidata-suggest-lexeme-source'."
-  :group 'helm-wikidata
+(defcustom wikibase-helm-suggest-lexeme-actions
+  '(("Insert LID at point" . wikibase-helm-insert-id-at-point)
+    ("Visit lexeme in browser" . wikibase-helm-visit-entity-in-browser)
+    ("Kill LID" . wikibase-helm-kill-id))
+  "List of actions for `wikibase-helm-suggest-lexeme-source'."
+  :group 'wikibase-helm
   :type '(alist :key-type string :value-type function))
 
-(defcustom helm-wikidata-suggest-form-actions
-  '(("Insert FID at point" . helm-wikidata-insert-id-at-point)
-    ("Visit form in browser" . helm-wikidata-visit-entity-in-browser)
-    ("Kill FID" . helm-wikidata-kill-id))
-  "List of actions for `helm-wikidata-suggest-form-source'."
-  :group 'helm-wikidata
+(defcustom wikibase-helm-suggest-form-actions
+  '(("Insert FID at point" . wikibase-helm-insert-id-at-point)
+    ("Visit form in browser" . wikibase-helm-visit-entity-in-browser)
+    ("Kill FID" . wikibase-helm-kill-id))
+  "List of actions for `wikibase-helm-suggest-form-source'."
+  :group 'wikibase-helm
   :type '(alist :key-type string :value-type function))
 
-(defcustom helm-wikidata-buffer-name "*helm wikidata*"
-  "Buffer name where completions of this package are shown")
+(defun wikibase-helm-suggest-set-candidates (type)
+  "Fetch and format candidates with type TYPE that matches pattern.
 
-(defvar helm-wikidata-suggest-search-url
-  "https://www.wikidata.org/entity/%s")
-
-(defun helm-wikidata-suggest-set-candidates (type)
-  "Set candidates with result and number of wikidata results found."
+Allowed types are the ones defined in a Wikibase instance. Some
+values that are accepted in some instances are: \"item\",
+\"property\", \"lexeme\" and \"form\"."
   (let ((suggestions
          (unless (equal helm-pattern "")
-           (helm-wikidata-suggest-fetch type helm-pattern))))
+           (wikibase-helm-suggest-fetch type helm-pattern))))
     (mapcar (lambda (suggestion)
               (cons
                ;; The strings are decoded so that Unicode coding character
@@ -68,18 +66,18 @@
                (plist-get suggestion 'id)))
             suggestions)))
 
-(defun helm-wikidata-suggest-fetch (type input)
+(defun wikibase-helm-suggest-fetch (type input)
   "Fetch suggestions for INPUT from XML buffer."
   (when (and input (not (equal input "")))
     (request-response-data
-     (request "https://www.wikidata.org/w/api.php"
+     (request wikibase-url-api
        :sync t
        :params `(("action" . "wbsearchentities")
                  ("search" . ,input)
                  ("format" . "xml")
                  ("errorformat" . "plaintext")
                  ("type" . ,type)
-                 ,@helm-wikidata-wbsearchentities-custom-params)
+                 ,@wikibase-helm-wbsearchentities-custom-params)
        :parser (lambda ()
                  (cl-loop
                   with result-alist = (xml-get-children
@@ -96,67 +94,67 @@
                    'description
                    (alist-get 'description (cadr i)))))))))
 
-(defvar helm-wikidata-suggest-item-source
-  (helm-build-sync-source "Wikidata Suggest"
+(defvar wikibase-helm-suggest-item-source
+  (helm-build-sync-source "Wikibase suggest"
     :candidates (lambda ()
-                  (helm-wikidata-suggest-set-candidates "item"))
-    :action 'helm-wikidata-suggest-item-actions
+                  (wikibase-helm-suggest-set-candidates "item"))
+    :action 'wikibase-helm-suggest-item-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
 
-(defvar helm-wikidata-suggest-property-source
-  (helm-build-sync-source "Wikidata Suggest"
+(defvar wikibase-helm-suggest-property-source
+  (helm-build-sync-source "Wikibase suggest"
     :candidates (lambda ()
-                  (helm-wikidata-suggest-set-candidates "property"))
-    :action 'helm-wikidata-suggest-property-actions
+                  (wikibase-helm-suggest-set-candidates "property"))
+    :action 'wikibase-helm-suggest-property-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
 
-(defvar helm-wikidata-suggest-lexeme-source
-  (helm-build-sync-source "Wikidata Suggest"
+(defvar wikibase-helm-suggest-lexeme-source
+  (helm-build-sync-source "Wikibase suggest"
     :candidates (lambda ()
-                  (helm-wikidata-suggest-set-candidates "lexeme"))
-    :action 'helm-wikidata-suggest-lexeme-actions
+                  (wikibase-helm-suggest-set-candidates "lexeme"))
+    :action 'wikibase-helm-suggest-lexeme-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
 
-(defvar helm-wikidata-suggest-form-source
-  (helm-build-sync-source "Wikidata Suggest"
+(defvar wikibase-helm-suggest-form-source
+  (helm-build-sync-source "Wikibase suggest"
     :candidates (lambda ()
-                  (helm-wikidata-suggest-set-candidates "form"))
-    :action 'helm-wikidata-suggest-form-actions
+                  (wikibase-helm-suggest-set-candidates "form"))
+    :action 'wikibase-helm-suggest-form-actions
     :match-dynamic t
     :keymap helm-map
     :multiline t))
 
-(defun helm-wikidata-visit-entity-in-browser (candidate)
-  (let ((url (format helm-wikidata-suggest-search-url
+(defun wikibase-helm-visit-entity-in-browser (candidate)
+  (let ((url (format wikibase-helm-suggest-search-url
                      (url-hexify-string candidate))))
     (browse-url url)))
 
-(defun helm-wikidata-insert-id-at-point (candidate)
+(defun wikibase-helm-insert-id-at-point (candidate)
   (insert candidate))
 
-(defun helm-wikidata-kill-id (candidate)
+(defun wikibase-helm-kill-id (candidate)
   (kill-new candidate))
 
-(defun helm-wikidata-suggest-item ()
+(defun wikibase-helm-suggest-item ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-item-source helm-wikidata-buffer-name))
+  (helm-other-buffer 'wikibase-helm-suggest-item-source wikibase-helm-buffer-name))
 
-(defun helm-wikidata-suggest-property ()
+(defun wikibase-helm-suggest-property ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-property-source helm-wikidata-buffer-name))
+  (helm-other-buffer 'wikibase-helm-suggest-property-source wikibase-helm-buffer-name))
 
-(defun helm-wikidata-suggest-lexeme ()
+(defun wikibase-helm-suggest-lexeme ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-lexeme-source helm-wikidata-buffer-name))
+  (helm-other-buffer 'wikibase-helm-suggest-lexeme-source wikibase-helm-buffer-name))
 
-(defun helm-wikidata-suggest-form ()
+(defun wikibase-helm-suggest-form ()
   (interactive)
-  (helm-other-buffer 'helm-wikidata-suggest-form-source helm-wikidata-buffer-name))
+  (helm-other-buffer 'wikibase-helm-suggest-form-source wikibase-helm-buffer-name))
 
-(provide 'helm-wikidata)
+(provide 'wikibase-helm)

@@ -21,4 +21,4 @@ wbsearchentities"
     (setf (alist-get "language" wikidata-wbsearchentities-custom-params nil nil 'equal) code
           (alist-get "uselang" wikidata-wbsearchentities-custom-params nil nil 'equal) code)))
 
-(provide 'wikidata-wbsearchentities)
+(provide 'wikibase-wbsearchentities)

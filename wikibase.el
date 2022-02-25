@@ -17,6 +17,12 @@ Some users might want to set this to a function that shows a
 message below the point instead of showing it in the
 minibuffer.")
 
+(defcustom wikibase-url-api
+  "https://www.wikidata.org/w/api.php")
+
+(defcustom wikibase-url
+  "https://www.wikidata.org/entity/%s")
+
 (defcustom wikidata-properties-fields
   '(myProperty
     myPropertyType
