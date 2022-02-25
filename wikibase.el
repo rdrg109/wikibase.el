@@ -1,3 +1,6 @@
+(require 'wikidata-helm)
+(require 'wikidata-wbsearchentities)
+(require 'wikidata-wdqs)
 (require 'csv-mode)
 (require 'request)
 
@@ -195,7 +198,7 @@ It calls `wikidata-show-string-func' to show the message."
         :params `(("action" . "wbgetentities")
                   ("props" . "labels")
                   ("ids" . ,id)
-                  ("languages" . "en")
+                  ("languages" . "es")
                   ("format" . "json"))
         :success `(lambda (&rest r)
                     (let* ((json (plist-get r :data))
@@ -214,19 +217,5 @@ It calls `wikidata-show-string-func' to show the message."
   (interactive)
   (wikidata-visit-entity
    (wikidata-read-property 'myProperty)))
-
-(defun wikidata-show-query-details ()
-  "Show the details of the query in the current buffer
-
-Information on query explanations can be found in
-https://www.mediawiki.org/wiki/Wikidata_Query_Service/User_Manual#Explain_Query"
-  (interactive)
-  (let* ((string (buffer-substring-no-properties (point-min) (point-max)))
-         (query (url-hexify-string string))
-         (url (concat
-               "https://query.wikidata.org/sparql?query="
-               query
-               "&explain=details")))
-    (w3m url)))
 
 (provide 'wikidata)
